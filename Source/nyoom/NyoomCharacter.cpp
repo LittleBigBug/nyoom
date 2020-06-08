@@ -2,18 +2,53 @@
 
 #include "NyoomCharacter.h"
 
+#include "Components/CapsuleComponent.h"
+
+static TAutoConsoleVariable<int32> CVarAutoBunnyHop(TEXT("move.autoBhop"), 1, TEXT("Automatically jump when you hit the ground\n"), ECVF_Default);
+
 // Sets default values
 ANyoomCharacter::ANyoomCharacter(const FObjectInitializer& objectInitializer)
     : Super(objectInitializer.SetDefaultSubobjectClass<UNyoomMovementComponent>(ACharacter::CharacterMovementComponentName)) {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	this->playerInput = FVector2D();
+    UCapsuleComponent* capsuleComponent = GetCapsuleComponent();
+
+    capsuleComponent->InitCapsuleSize(30.48f, 68.58f);
+    capsuleComponent->SetCollisionResponseToChannel(ECC_Camera, ECR_Block);
+    capsuleComponent->bReturnMaterialOnMove = true;
+
+    BaseEyeHeight = 54.34f;
 }
 
 // Called when the game starts or when spawned
 void ANyoomCharacter::BeginPlay() {
 	Super::BeginPlay();
+}
+
+void ANyoomCharacter::InputForward(float val) {
+    if (FMath::IsNearlyZero(val)) {
+        return;
+    }
+
+    AddMovementInput(GetActorForwardVector(), val);
+}
+
+void ANyoomCharacter::InputStrafe(float val) {
+    if (FMath::IsNearlyZero(val)) {
+        return;
+    }
+
+    AddMovementInput(GetActorRightVector(), val);
+}
+
+// there MUST BE a better way...
+void ANyoomCharacter::InputCrouch() {
+    Crouch();
+}
+
+void ANyoomCharacter::InputUnCrouch() {
+    UnCrouch();
 }
 
 // Called every frame
@@ -31,7 +66,15 @@ void ANyoomCharacter::SetupPlayerInputComponent(UInputComponent* playerInputComp
 
     // Handle mouse inputs
     playerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
-    playerInputComponent->BindAxis("Right", this, &APawn::AddControllerYawInput);
+    playerInputComponent->BindAxis("LookRight", this, &APawn::AddControllerYawInput);
+
+    // Handle jumping inputs
+    playerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+    playerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+
+    // Handle crouching inputs
+    playerInputComponent->BindAction("Crouch", IE_Pressed, this, &ANyoomCharacter::InputCrouch);
+    playerInputComponent->BindAction("Crouch", IE_Released, this, &ANyoomCharacter::InputUnCrouch);
 }
 
 void ANyoomCharacter::PostInitializeComponents() {
@@ -40,18 +83,28 @@ void ANyoomCharacter::PostInitializeComponents() {
     this->movementComponent = Cast<UNyoomMovementComponent>(Super::GetMovementComponent());
 }
 
-void ANyoomCharacter::InputForward(float val) {
-    this->playerInput.X = val;
+void ANyoomCharacter::ClearJumpInput(float delta) {
+    if (this->movementComponent->bCheatFlying || CVarAutoBunnyHop->GetInt() != 0) {
+        return;
+    }
+
+    Super::ClearJumpInput(delta);
 }
 
-void ANyoomCharacter::InputStrafe(float val) {
-    this->playerInput.Y = val;
-}
+void ANyoomCharacter::OnMovementModeChanged(EMovementMode prevMode, uint8 prevCustomMode) {
+    if (!bPressedJump) {
+        ResetJumpState();
+    }
 
-void ANyoomCharacter::CalcFriction() {
-    FVector dir;
-    float speed;
+    if (this->movementComponent->IsFalling() && bProxyIsJumpForceApplied) {
+        ProxyJumpForceStartedTime = GetWorld()->GetTimeSeconds();
+    } else {
+        JumpCurrentCount = 0;
+        JumpKeyHoldTime = 0.f;
+        JumpForceTimeRemaining = 0.f;
+        bWasJumping = false;
+    }
 
-    this->velocity.ToDirectionAndLength(dir, speed);
-
+    K2_OnMovementModeChanged(prevMode, this->movementComponent->MovementMode, prevCustomMode, this->movementComponent->CustomMovementMode);
+    MovementModeChangedDelegate.Broadcast(this, prevMode, prevCustomMode);
 }

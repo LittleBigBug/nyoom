@@ -21,23 +21,13 @@ protected:
 	// Called when the game starts or when spawned
 	void BeginPlay() override;
 
-	// Calculates new velocity
-	void CalcMovement();
-
-	// Calculates applied friction on velocity
-	void CalcFriction();
-
 	// Mapped input functions
 	void InputStrafe(float val);
 	void InputForward(float val);
 
-	// Player input vector
-	// x = forward/backward
-	// y = strafe
-	FVector2D playerInput;
-
-	// Player Velocity
-	FVector velocity;
+	// Crouching inputs
+	void InputCrouch();
+	void InputUnCrouch();
 
 	// Custom Movement component
     UNyoomMovementComponent* movementComponent;
@@ -51,16 +41,13 @@ public:
 
 	void PostInitializeComponents() override;
 
+	void ClearJumpInput(float delta) override;
+	void OnMovementModeChanged(EMovementMode prevMode, uint8 prevCustomMode) override;
+
     // Allow BP to access movement components
     UFUNCTION(BlueprintCallable, Category = "Movement")
     FORCEINLINE class UNyoomMovementComponent* GetNyoomMovementComponent() const {
         return this->movementComponent;
     }
-
-	// Allow access to velocity
-    UFUNCTION(BlueprintCallable, Category = "Movement")
-	FVector GetMovementVel() {
-	    return this->velocity;
-	}
 
 };

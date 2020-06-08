@@ -86,6 +86,7 @@ void UNyoomMovementComponent::CalcVelocity(float delta, float friction, bool bFl
     bool reqMove = ApplyRequestedMove(delta, maxAccel, maxSpeed, friction, brakingDeceleration, requestedAccel, requestedSpeed);
     if (reqMove) {
         requestedAccel = requestedAccel.GetClampedToMaxSize(maxAccel);
+        bZeroRequestedAccel = false;
     }
 
     if (bForceMaxAccel) {
@@ -126,7 +127,7 @@ void UNyoomMovementComponent::CalcVelocity(float delta, float friction, bool bFl
 
         lookVec2D.Z = 0.f;
 
-        FVector perpendicularAccel = (lookVec2D | Acceleration) * lookVec2D;
+        FVector perpendicularAccel = (lookVec2D | Acceleration) * lookVec2D; // Dot product
         FVector tangentialAccel = Acceleration - perpendicularAccel;
         FVector unitAccel = Acceleration;
 
@@ -142,7 +143,6 @@ void UNyoomMovementComponent::CalcVelocity(float delta, float friction, bool bFl
 
         const FVector accelDir = Acceleration.GetSafeNormal2D();
 
-        // Dot product is done here
         // Strafe movementtttt
         const float veer = Velocity.X * accelDir.X + Velocity.Y * accelDir.Y;
         const float addSpeed = (bIsGroundMove ? Acceleration : Acceleration.GetClampedToMaxSize2D(AirSpeedCap)).Size2D() - veer;
