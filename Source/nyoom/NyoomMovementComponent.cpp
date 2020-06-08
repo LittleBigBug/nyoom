@@ -21,7 +21,7 @@ UNyoomMovementComponent::UNyoomMovementComponent() {
     GroundAcceleration = 10.f;
     AirAcceleration = 10000.f;
 
-    AirSpeedCap = 57.15f;
+    AirSpeedCap = 100.f;
 
     GroundFriction = 4.f;
     BrakingFriction = 4.f;

@@ -12,6 +12,7 @@ ANyoomCharacter::ANyoomCharacter(const FObjectInitializer& objectInitializer)
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Maybe change this to a box collision component
     UCapsuleComponent* capsuleComponent = GetCapsuleComponent();
 
     capsuleComponent->InitCapsuleSize(30.48f, 68.58f);
