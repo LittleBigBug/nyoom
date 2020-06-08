@@ -1,0 +1,15 @@
+C:/Users/ethan/Documents/Unreal Projects/nyoom/cmake-build-debug/CMakeFiles/nyoomEditor.dir
+C:/Users/ethan/Documents/Unreal Projects/nyoom/cmake-build-debug/CMakeFiles/UE4Editor.dir
+C:/Users/ethan/Documents/Unreal Projects/nyoom/cmake-build-debug/CMakeFiles/nyoom-Win64-DebugGame.dir
+C:/Users/ethan/Documents/Unreal Projects/nyoom/cmake-build-debug/CMakeFiles/UE4Editor-Win64-DebugGame.dir
+C:/Users/ethan/Documents/Unreal Projects/nyoom/cmake-build-debug/CMakeFiles/nyoomEditor-Win64-DebugGame.dir
+C:/Users/ethan/Documents/Unreal Projects/nyoom/cmake-build-debug/CMakeFiles/nyoom.dir
+C:/Users/ethan/Documents/Unreal Projects/nyoom/cmake-build-debug/CMakeFiles/nyoom-Win64-Shipping.dir
+C:/Users/ethan/Documents/Unreal Projects/nyoom/cmake-build-debug/CMakeFiles/UE4Editor-Win64-Shipping.dir
+C:/Users/ethan/Documents/Unreal Projects/nyoom/cmake-build-debug/CMakeFiles/nyoomEditor-Win64-Shipping.dir
+C:/Users/ethan/Documents/Unreal Projects/nyoom/cmake-build-debug/CMakeFiles/UE4Game-Win64-DebugGame.dir
+C:/Users/ethan/Documents/Unreal Projects/nyoom/cmake-build-debug/CMakeFiles/UE4Game-Win64-Shipping.dir
+C:/Users/ethan/Documents/Unreal Projects/nyoom/cmake-build-debug/CMakeFiles/UE4Game.dir
+C:/Users/ethan/Documents/Unreal Projects/nyoom/cmake-build-debug/CMakeFiles/FakeTarget.dir
+C:/Users/ethan/Documents/Unreal Projects/nyoom/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/ethan/Documents/Unreal Projects/nyoom/cmake-build-debug/CMakeFiles/rebuild_cache.dir
