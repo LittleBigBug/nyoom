@@ -6,6 +6,8 @@
 
 static TAutoConsoleVariable<int32> CVarAutoBunnyHop(TEXT("move.autoBhop"), 1, TEXT("Automatically jump when you hit the ground\n"), ECVF_Default);
 
+static TAutoConsoleVariable<int32> CVarUnits(TEXT("hud.unitType"), 1, TEXT("Unit type to measure velocity: 0 = ue4, 1 = hammer units (source)\n"), ECVF_Default);
+
 // Sets default values
 ANyoomCharacter::ANyoomCharacter(const FObjectInitializer& objectInitializer)
     : Super(objectInitializer.SetDefaultSubobjectClass<UNyoomMovementComponent>(ACharacter::CharacterMovementComponentName)) {
@@ -108,4 +110,18 @@ void ANyoomCharacter::OnMovementModeChanged(EMovementMode prevMode, uint8 prevCu
 
     K2_OnMovementModeChanged(prevMode, this->movementComponent->MovementMode, prevCustomMode, this->movementComponent->CustomMovementMode);
     MovementModeChangedDelegate.Broadcast(this, prevMode, prevCustomMode);
+}
+
+float ANyoomCharacter::GetReadableVelocity() {
+    float vel = this->movementComponent->Velocity.Size2D();
+
+    // Convert to hammer units
+    if (CVarUnits->GetInt() == 1) {
+        vel /= 1.905;
+    }
+
+    // Round to 2 decimal places
+    vel *= 100;
+    int round = (int) vel;
+    return (float) round / 100;;
 }

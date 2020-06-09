@@ -3,7 +3,9 @@
 #include "NyoomGameMode.h"
 
 #include "NyoomCharacter.h"
+#include "NyoomHUD.h"
 
 ANyoomGameMode::ANyoomGameMode() {
     DefaultPawnClass = ANyoomCharacter::StaticClass();
+    HUDClass = ANyoomHUD::StaticClass();
 }

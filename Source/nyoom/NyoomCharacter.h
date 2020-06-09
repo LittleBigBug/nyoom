@@ -50,4 +50,8 @@ public:
         return this->movementComponent;
     }
 
+    // Returns a rounded velocity to 2 places and converts to desired unit
+    UFUNCTION(BlueprintCallable, Category = "Movement")
+    float GetReadableVelocity();
+
 };

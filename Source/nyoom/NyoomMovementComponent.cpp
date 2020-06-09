@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 
 UNyoomMovementComponent::UNyoomMovementComponent() {
+    // We are handling air control.. so
     AirControl = 1.f;
 
     AirControlBoostMultiplier = 1.f;
@@ -14,14 +15,14 @@ UNyoomMovementComponent::UNyoomMovementComponent() {
     // 450 Hammer units -> 857.25 unreal units
     MaxAcceleration = 857.25f;
 
-    MaxWalkSpeed = 361.9f;
+    // 250 Hammer units -> 476.25 unreal units
+    MaxWalkSpeed = 476.25f;
+    WalkSpeed = 476.25f;
 
-    WalkSpeed = 285.75f;
+    GroundAcceleration = 10.f; // Default ground acceleration
+    AirAcceleration = 10000.f; // Higher air control allowed in movement-skill games
 
-    GroundAcceleration = 10.f;
-    AirAcceleration = 10000.f;
-
-    AirSpeedCap = 100.f;
+    AirSpeedCap = 50.f;
 
     GroundFriction = 4.f;
     BrakingFriction = 4.f;
